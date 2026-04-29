@@ -4,12 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Self-Assessment Tax Estimator</title>
+    <title>Self-Assessment Tax Estimator | Rolling Realm</title>
 
-    <!-- Shared tax rates — update rates.js each April, all widgets update automatically -->
     <script src="https://tax-estimator.netlify.app/rates.js"></script>
 
-    <!-- Inline fallback — used when opening locally without Netlify -->
     <script>
         if (typeof TAX_RATES === 'undefined') {
             var TAX_RATES = {
@@ -32,70 +30,67 @@
     </script>
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito+Sans:wght@300;400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Roboto+Mono:wght@500;600;700&display=swap"
         rel="stylesheet">
 
     <script>
-        /* ============================================================
-           BRAND CONFIG — edit this block for each customer
-           ============================================================ */
         const BRAND = {
-            // Practice details
-            practiceDisplayName: 'Hartwell Bookkeeping',
+            practiceDisplayName: 'Rolling Realm',
             ctaText: 'Book a Free Consultation →',
-            ctaUrl: 'https://hartwellbookkeeping.co.uk/contact',
+            ctaUrl: 'https://rollingrealm.com/contact',
 
-            // Colours (use hex or any valid CSS colour)
-            colourAccent: '#c4637a',
-            colourAccentLight: '#f5dde3',
-            colourAccentPale: '#fdf6f8',
-            colourGold: '#b8963e',
-            colourGoldLight: '#f5ecd4',
-            colourNavy: '#2c2c3e',
-            colourBodyText: '#444455',
-            colourMuted: '#888899',
-            colourBorder: '#e8e2ec',
-            colourBg: '#fafaf9',
+            colourAccent: '#d4af37',
+            colourAccentLight: 'rgba(212,175,55,0.15)',
+            colourAccentPale: 'rgba(212,175,55,0.06)',
+            colourGold: '#e6c55f',
+            colourGoldLight: 'rgba(230,197,95,0.12)',
+            colourNavy: '#0a0a0f',
+            colourBodyText: '#e8e6e3',
+            colourMuted: '#7a7772',
+            colourBorder: '#2d2d3d',
+            colourBg: '#12121a',
 
-            // Widget header text
             eyebrow: 'Free Estimator',
             heading: 'How Much Tax Will You Owe?',
             subheading: 'Enter your income and expenses below for an instant self-assessment estimate. No sign-up, no data stored — just a clear number in seconds.',
 
-            // Input labels & hints
             label_income: 'Self-Employment Income',
             hint_income: 'Your total turnover / gross receipts',
             label_expenses: 'Business Expenses',
             hint_expenses: 'Costs wholly & exclusively for your business',
             label_other: 'Other Income (employment / savings / rental)',
             hint_other: 'Include any PAYE salary, rental income, dividends etc.',
-            label_pension: 'Pension Contributions',
-            hint_pension: 'Personal pension contributions reduce your taxable income',
-            label_poa: 'Payments on Account Already Made',
+            label_pension: 'Pension Contributions (net amount you pay)',
+            hint_pension: 'Enter what you actually pay in — basic rate tax relief (25% gross-up) is applied automatically',
+            label_poa: 'Payments on Account (advance payments to HMRC)',
             hint_poa: 'Total advance payments already made to HMRC this year',
 
-            // Results panel labels
             label_takeHome: 'Estimated Take-Home (self-employment)',
             label_totalTax: 'Total Tax Due',
             label_monthly: '/ month to set aside',
         };
-        /* ============================================================ */
     </script>
 
     <style>
         :root {
-            --accent: #c4637a;
-            --accent-light: #f5dde3;
-            --accent-pale: #fdf6f8;
-            --gold: #b8963e;
-            --gold-light: #f5ecd4;
-            --navy: #2c2c3e;
-            --body-text: #444455;
-            --muted: #888899;
-            --border: #e8e2ec;
-            --white: #ffffff;
-            --bg: #fafaf9;
-            --radius: 12px;
+            --accent: #d4af37;
+            --accent-light: rgba(212, 175, 55, 0.15);
+            --accent-pale: rgba(212, 175, 55, 0.06);
+            --gold: #e6c55f;
+            --gold-light: rgba(230, 197, 95, 0.12);
+            --purple: #6b4c9a;
+            --purple-light: #8b6cb8;
+            --navy: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a26;
+            --bg-card-hover: #222230;
+            --body-text: #e8e6e3;
+            --muted: #7a7772;
+            --border: #2d2d3d;
+            --white: #e8e6e3;
+            --bg: #12121a;
+            --radius: 8px;
+            --text-secondary: #b8b5b0;
         }
 
         * {
@@ -105,15 +100,17 @@
         }
 
         body {
-            font-family: 'Nunito Sans', sans-serif;
+            font-family: 'Crimson Pro', Georgia, serif;
             background: transparent;
             color: var(--body-text);
+            font-size: 16px;
+            line-height: 1.6;
         }
 
         .widget {
             max-width: 960px;
             margin: 0 auto;
-            padding: 24px;
+            padding: 28px;
         }
 
         .widget-header {
@@ -121,50 +118,52 @@
             margin-bottom: 36px;
             padding-bottom: 32px;
             border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .widget-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
         }
 
         .widget-eyebrow {
-            font-size: 0.68rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 0.65rem;
             font-weight: 700;
-            letter-spacing: 0.18em;
+            letter-spacing: 0.22em;
             text-transform: uppercase;
             color: var(--accent);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .widget-heading {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.2rem;
-            font-weight: 600;
-            color: var(--navy);
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--body-text);
             margin-bottom: 12px;
-            line-height: 1.2;
+            line-height: 1.25;
+            letter-spacing: 0.02em;
         }
 
         .widget-sub {
-            font-size: 0.88rem;
-            color: var(--muted);
-            max-width: 520px;
+            font-family: 'Crimson Pro', serif;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            max-width: 500px;
             margin: 0 auto;
             line-height: 1.7;
         }
 
         @media (max-width: 700px) {
             .widget-heading {
-                font-size: 1.7rem;
-            }
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 28px;
-            align-items: start;
-        }
-
-        @media (max-width: 700px) {
-            .grid {
-                grid-template-columns: 1fr;
+                font-size: 1.5rem;
             }
 
             .widget {
@@ -172,11 +171,36 @@
             }
         }
 
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .card {
-            background: var(--white);
+            background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 30px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--purple), transparent);
         }
 
         .card+.card {
@@ -184,27 +208,30 @@
         }
 
         .section-label {
-            font-size: 0.68rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 0.65rem;
             font-weight: 700;
             letter-spacing: 0.18em;
             text-transform: uppercase;
-            color: var(--accent);
+            color: var(--purple-light);
             margin-bottom: 6px;
         }
 
         .card-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--navy);
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--body-text);
             margin-bottom: 4px;
+            letter-spacing: 0.02em;
         }
 
         .card-sub {
-            font-size: 0.78rem;
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.9rem;
             color: var(--muted);
             line-height: 1.5;
-            margin-bottom: 26px;
+            margin-bottom: 24px;
         }
 
         .field {
@@ -217,11 +244,12 @@
 
         label {
             display: block;
-            font-size: 0.75rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 0.7rem;
             font-weight: 700;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
-            color: var(--navy);
+            color: var(--text-secondary);
             margin-bottom: 7px;
         }
 
@@ -234,7 +262,8 @@
             left: 13px;
             top: 50%;
             transform: translateY(-50%);
-            font-weight: 700;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 600;
             color: var(--accent);
             font-size: 0.95rem;
             pointer-events: none;
@@ -242,13 +271,13 @@
 
         input[type="number"] {
             width: 100%;
-            padding: 12px 12px 12px 30px;
-            border: 1.5px solid var(--border);
-            border-radius: 8px;
-            font-family: 'Nunito Sans', sans-serif;
+            padding: 11px 12px 11px 30px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'Roboto Mono', monospace;
             font-size: 0.95rem;
-            color: var(--navy);
-            background: var(--bg);
+            color: var(--body-text);
+            background: var(--navy);
             transition: border-color 0.2s, box-shadow 0.2s;
             -moz-appearance: textfield;
         }
@@ -260,12 +289,13 @@
         input[type="number"]:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(196, 99, 122, 0.1);
-            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+            background: #0f0f18;
         }
 
         .hint {
-            font-size: 0.7rem;
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.82rem;
             color: var(--muted);
             margin-top: 5px;
             line-height: 1.4;
@@ -273,88 +303,124 @@
 
         .results-card {
             background: var(--navy);
+            border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 30px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .results-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .results-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle at bottom right, rgba(212, 175, 55, 0.05), transparent 70%);
+            pointer-events: none;
         }
 
         .results-label {
-            font-size: 0.68rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 0.65rem;
             font-weight: 700;
-            letter-spacing: 0.18em;
+            letter-spacing: 0.22em;
             text-transform: uppercase;
-            color: var(--gold);
+            color: var(--accent);
             margin-bottom: 6px;
         }
 
         .results-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.35rem;
-            font-weight: 600;
-            color: var(--white);
-            margin-bottom: 26px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--body-text);
+            margin-bottom: 24px;
+            letter-spacing: 0.02em;
         }
 
         .r-row {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            padding: 9px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(45, 45, 61, 0.8);
         }
 
         .r-row:last-of-type {
             border-bottom: none;
         }
 
+        .r-row.hidden {
+            display: none;
+        }
+
         .r-label {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.5);
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.88rem;
+            color: var(--muted);
             max-width: 58%;
             line-height: 1.3;
         }
 
         .r-val {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--white);
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--body-text);
         }
 
         .r-val.neg {
-            color: #f0a0b4;
+            color: #c084fc;
         }
 
         .r-val.pos {
-            color: #90dfb0;
+            color: #34d399;
         }
 
         .r-val.ni {
-            color: var(--gold);
+            color: var(--accent);
+        }
+
+        .r-val.zero {
+            color: var(--muted);
         }
 
         .bar-wrap {
-            margin: 22px 0 8px;
-            height: 7px;
-            border-radius: 4px;
+            margin: 20px 0 8px;
+            height: 6px;
+            border-radius: 3px;
             display: flex;
             gap: 2px;
             overflow: hidden;
         }
 
         .b {
-            border-radius: 3px;
+            border-radius: 2px;
             transition: flex 0.4s ease;
         }
 
         .b-home {
-            background: #90dfb0;
+            background: #34d399;
         }
 
         .b-tax {
-            background: #f0a0b4;
+            background: #c084fc;
         }
 
         .b-ni {
-            background: var(--gold);
+            background: var(--accent);
         }
 
         .bar-legend {
@@ -368,51 +434,58 @@
             display: flex;
             align-items: center;
             gap: 5px;
-            font-size: 0.68rem;
-            color: rgba(255, 255, 255, 0.4);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 0.65rem;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
         }
 
         .bl-dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 2px;
         }
 
         .total-box {
-            background: rgba(184, 150, 62, 0.12);
-            border: 1px solid rgba(184, 150, 62, 0.3);
-            border-radius: 10px;
+            background: rgba(212, 175, 55, 0.07);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 6px;
             padding: 20px;
             text-align: center;
             margin-bottom: 12px;
+            position: relative;
         }
 
         .total-lbl {
-            font-size: 0.68rem;
-            letter-spacing: 0.16em;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 0.62rem;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: rgba(245, 236, 212, 0.7);
+            color: rgba(212, 175, 55, 0.6);
             margin-bottom: 8px;
         }
 
         .total-amt {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.6rem;
+            font-family: 'Cinzel', serif;
+            font-size: 2.4rem;
             font-weight: 700;
-            color: var(--gold);
+            color: var(--accent);
             line-height: 1;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
         }
 
         .total-monthly {
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.35);
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.82rem;
+            color: var(--muted);
             margin-top: 6px;
         }
 
         .takehome-box {
-            background: rgba(144, 223, 176, 0.08);
-            border: 1px solid rgba(144, 223, 176, 0.2);
-            border-radius: 10px;
+            background: rgba(52, 211, 153, 0.06);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            border-radius: 6px;
             padding: 14px 18px;
             display: flex;
             justify-content: space-between;
@@ -421,43 +494,48 @@
         }
 
         .th-lbl {
-            font-size: 0.78rem;
-            color: rgba(255, 255, 255, 0.45);
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.88rem;
+            color: var(--muted);
         }
 
         .th-val {
-            font-size: 1.1rem;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.05rem;
             font-weight: 700;
-            color: #90dfb0;
+            color: #34d399;
         }
 
         .cta-btn {
             display: block;
             width: 100%;
-            padding: 14px;
-            background: var(--accent);
-            color: var(--white);
+            padding: 13px;
+            background: linear-gradient(135deg, var(--accent), #b8963e);
+            color: var(--navy);
             border: none;
-            border-radius: 8px;
-            font-family: 'Nunito Sans', sans-serif;
-            font-size: 0.85rem;
+            border-radius: 6px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 0.78rem;
             font-weight: 700;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
             cursor: pointer;
             text-decoration: none;
             text-align: center;
-            transition: background 0.2s, transform 0.1s;
+            transition: filter 0.2s, transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
         }
 
         .cta-btn:hover {
-            filter: brightness(0.9);
+            filter: brightness(1.1);
             transform: translateY(-1px);
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.4);
         }
 
         .disclaimer {
-            font-size: 0.66rem;
-            color: rgba(255, 255, 255, 0.22);
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.72rem;
+            color: rgba(122, 119, 114, 0.7);
             text-align: center;
             margin-top: 12px;
             line-height: 1.6;
@@ -554,9 +632,14 @@
                         <span class="r-label">Net Profit</span>
                         <span class="r-val" id="r-profit">£30,000</span>
                     </div>
+                    <!-- Other income row — hidden when zero -->
+                    <div class="r-row hidden" id="row-other">
+                        <span class="r-label">Plus: Other Income</span>
+                        <span class="r-val pos" id="r-other">£0</span>
+                    </div>
                     <div class="r-row">
-                        <span class="r-label">Less: Pension Contributions</span>
-                        <span class="r-val neg" id="r-pension">−£0</span>
+                        <span class="r-label">Less: Pension Contributions (gross)</span>
+                        <span class="r-val neg" id="r-pension">—</span>
                     </div>
                     <div class="r-row">
                         <span class="r-label">Less: Personal Allowance</span>
@@ -567,7 +650,7 @@
                         <span class="r-val" id="r-taxable">£17,430</span>
                     </div>
 
-                    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:14px 0;">
+                    <hr style="border:none;border-top:1px solid rgba(45,45,61,0.8);margin:12px 0;">
 
                     <div class="r-row">
                         <span class="r-label">Income Tax (20% basic rate)</span>
@@ -583,7 +666,7 @@
                     </div>
                     <div class="r-row">
                         <span class="r-label">Less: Payments on Account</span>
-                        <span class="r-val pos" id="r-poa">−£0</span>
+                        <span class="r-val pos" id="r-poa">—</span>
                     </div>
 
                     <div class="bar-wrap">
@@ -593,13 +676,13 @@
                     </div>
                     <div class="bar-legend">
                         <div class="bl">
-                            <div class="bl-dot" style="background:#90dfb0"></div>Take-home
+                            <div class="bl-dot" style="background:#34d399"></div>Take-home
                         </div>
                         <div class="bl">
-                            <div class="bl-dot" style="background:#f0a0b4"></div>Income Tax
+                            <div class="bl-dot" style="background:#c084fc"></div>Income Tax
                         </div>
                         <div class="bl">
-                            <div class="bl-dot" style="background:#b8963e"></div>NI
+                            <div class="bl-dot" style="background:#d4af37"></div>NI
                         </div>
                     </div>
 
@@ -618,8 +701,6 @@
 
                     <div class="disclaimer">
                         Estimates only — based on <span id="d-taxyear"></span> HMRC rates for England &amp; Wales.<br>
-                        Assumes all income taxed as standard income (dividends &amp; savings may differ).<br>
-                        Does not include student loans, child benefit charges, or other adjustments.<br>
                         Not a substitute for professional advice. Always consult a qualified bookkeeper.
                     </div>
                 </div>
@@ -629,7 +710,6 @@
     </div>
 
     <script>
-        // ── Apply brand config to DOM ──────────────────────────────
         (function applyBrand() {
             const r = document.documentElement.style;
             r.setProperty('--accent', BRAND.colourAccent);
@@ -669,9 +749,13 @@
             document.getElementById('d-taxyear').textContent = TAX_RATES.TAX_YEAR;
         })();
 
-        // ── Calculation engine ─────────────────────────────────────
         function fmt(n) {
             return '£' + Math.max(0, Math.round(n)).toLocaleString('en-GB');
+        }
+
+        function sanitise(id) {
+            const val = parseFloat(document.getElementById(id).value);
+            return (!isFinite(val) || val < 0) ? 0 : val;
         }
 
         function calcIT(taxable) {
@@ -693,11 +777,15 @@
         }
 
         function run() {
-            const income = +document.getElementById('income').value || 0;
-            const expenses = +document.getElementById('expenses').value || 0;
-            const other = +document.getElementById('other').value || 0;
-            const pension = +document.getElementById('pension').value || 0;
-            const poa = +document.getElementById('poa').value || 0;
+            const income = sanitise('income');
+            const expenses = sanitise('expenses');
+            const other = sanitise('other');
+            const pensionNet = sanitise('pension');
+            const poa = sanitise('poa');
+
+            // Gross up pension: user enters net amount, HMRC adds 25% basic rate relief
+            const pensionGross = pensionNet > 0 ? pensionNet * 1.25 : 0;
+
             let pa = TAX_RATES.STD_PA;
 
             const profit = Math.max(0, income - expenses);
@@ -708,7 +796,7 @@
             }
             pa = Math.min(pa, TAX_RATES.STD_PA);
 
-            const taxable = Math.max(0, totalIncome - pa - pension);
+            const taxable = Math.max(0, totalIncome - pa - pensionGross);
             const incomeTax = calcIT(taxable);
             const c4 = calcC4(profit);
             const c2 = profit > TAX_RATES.C2_THRESHOLD ? TAX_RATES.C2_ANNUAL : 0;
@@ -718,19 +806,33 @@
             function setVal(id, display, isNeg) {
                 const el = document.getElementById(id);
                 el.textContent = display;
-                el.classList.remove('neg', 'pos');
-                if (display !== '£0') el.classList.add(isNeg ? 'neg' : 'pos');
+                el.classList.remove('neg', 'pos', 'zero');
+                if (display === '—') { el.classList.add('zero'); }
+                else if (display !== '£0') el.classList.add(isNeg ? 'neg' : 'pos');
             }
 
-            function negFmt(n) { return n > 0 ? '−' + fmt(n) : '£0'; }
+            function negFmt(n) { return n > 0 ? '−' + fmt(n) : '—'; }
 
             document.getElementById('r-gross').textContent = fmt(income);
             setVal('r-exp', negFmt(expenses), true);
             document.getElementById('r-profit').textContent = fmt(profit);
-            setVal('r-pension', negFmt(pension), true);
+
+            // Other income row — show only when non-zero
+            const rowOther = document.getElementById('row-other');
+            if (other > 0) {
+                rowOther.classList.remove('hidden');
+                document.getElementById('r-other').textContent = '+' + fmt(other);
+            } else {
+                rowOther.classList.add('hidden');
+            }
+
+            // Pension row — show gross amount with note if grossed up
+            setVal('r-pension', negFmt(pensionGross), true);
+
             setVal('r-pa', negFmt(pa), true);
             document.getElementById('r-taxable').textContent = fmt(taxable);
             setVal('r-tax', negFmt(incomeTax), true);
+
             // NI rows — set directly to preserve the .ni gold class
             document.getElementById('r-c4').textContent = negFmt(c4);
             document.getElementById('r-c2').textContent = negFmt(c2);
@@ -747,7 +849,6 @@
         document.querySelectorAll('input').forEach(el => el.addEventListener('input', run));
         run();
 
-        // ── Auto-resize for iframe embedding ──────────────────────
         function sendHeight() {
             window.parent.postMessage({ type: 'lmo-widget-height', height: document.body.scrollHeight }, '*');
         }
