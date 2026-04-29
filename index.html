@@ -80,8 +80,8 @@
             hint_expenses: 'Costs wholly & exclusively for your business',
             label_other: 'Other Income (employment / savings / rental)',
             hint_other: 'Include any PAYE salary, rental income, dividends etc.',
-            label_pension: 'Pension Contributions',
-            hint_pension: 'Personal pension contributions reduce your taxable income',
+            label_pension: 'Pension Contributions (net amount you pay)',
+            hint_pension: 'Enter what you actually pay in — basic rate tax relief (25% gross-up) is applied automatically',
             label_poa: 'Payments on Account Already Made',
             hint_poa: 'Total advance payments already made to HMRC this year',
 
@@ -415,6 +415,10 @@
             border-bottom: none;
         }
 
+        .r-row.hidden {
+            display: none;
+        }
+
         .r-label {
             font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.5);
@@ -434,6 +438,10 @@
 
         .r-val.pos {
             color: #90dfb0;
+        }
+
+        .r-val.zero {
+            color: rgba(255, 255, 255, 0.25);
         }
 
         .bar-wrap {
@@ -686,9 +694,14 @@
                         <span class="r-label">Net Profit</span>
                         <span class="r-val" id="r-profit">£30,000</span>
                     </div>
+                    <!-- Other income row — hidden when zero -->
+                    <div class="r-row hidden" id="row-other">
+                        <span class="r-label">Plus: Other Income</span>
+                        <span class="r-val pos" id="r-other">£0</span>
+                    </div>
                     <div class="r-row">
-                        <span class="r-label">Less: Pension Contributions</span>
-                        <span class="r-val neg" id="r-pension">−£0</span>
+                        <span class="r-label">Less: Pension Contributions (gross)</span>
+                        <span class="r-val neg" id="r-pension">—</span>
                     </div>
                     <div class="r-row">
                         <span class="r-label">Less: Personal Allowance</span>
@@ -715,7 +728,7 @@
                     </div>
                     <div class="r-row">
                         <span class="r-label">Less: Payments on Account</span>
-                        <span class="r-val pos" id="r-poa">−£0</span>
+                        <span class="r-val pos" id="r-poa">—</span>
                     </div>
 
                     <div class="bar-wrap">
@@ -825,9 +838,14 @@
             footerEl.innerHTML = '<a href="' + BRAND.footerUrl + '" target="_blank">' + BRAND.footerCopy + '</a>';
         })();
 
-        // ── Calculation engine ─────────────────────────────────────
+        // ── Helpers ────────────────────────────────────────────────
         function fmt(n) {
             return '£' + Math.max(0, Math.round(n)).toLocaleString('en-GB');
+        }
+
+        function sanitise(id) {
+            const val = parseFloat(document.getElementById(id).value);
+            return (!isFinite(val) || val < 0) ? 0 : val;
         }
 
         function calcIT(taxable) {
@@ -848,12 +866,17 @@
             return lower + upper;
         }
 
+        // ── Calculation engine ─────────────────────────────────────
         function run() {
-            const income = +document.getElementById('income').value || 0;
-            const expenses = +document.getElementById('expenses').value || 0;
-            const other = +document.getElementById('other').value || 0;
-            const pension = +document.getElementById('pension').value || 0;
-            const poa = +document.getElementById('poa').value || 0;
+            const income = sanitise('income');
+            const expenses = sanitise('expenses');
+            const other = sanitise('other');
+            const pensionNet = sanitise('pension');
+            const poa = sanitise('poa');
+
+            // Gross up pension: user enters net amount, HMRC adds 25% basic rate relief
+            const pensionGross = pensionNet > 0 ? pensionNet * 1.25 : 0;
+
             let pa = TAX_RATES.STD_PA;
 
             const profit = Math.max(0, income - expenses);
@@ -864,7 +887,7 @@
             }
             pa = Math.min(pa, TAX_RATES.STD_PA);
 
-            const taxable = Math.max(0, totalIncome - pa - pension);
+            const taxable = Math.max(0, totalIncome - pa - pensionGross);
             const incomeTax = calcIT(taxable);
             const c4 = calcC4(profit);
             const c2 = profit > TAX_RATES.C2_THRESHOLD ? TAX_RATES.C2_ANNUAL : 0;
@@ -874,16 +897,29 @@
             function setVal(id, display, isNeg) {
                 const el = document.getElementById(id);
                 el.textContent = display;
-                el.classList.remove('neg', 'pos');
-                if (display !== '£0') el.classList.add(isNeg ? 'neg' : 'pos');
+                el.classList.remove('neg', 'pos', 'zero');
+                if (display === '—') { el.classList.add('zero'); }
+                else if (display !== '£0') el.classList.add(isNeg ? 'neg' : 'pos');
             }
 
-            function negFmt(n) { return n > 0 ? '−' + fmt(n) : '£0'; }
+            function negFmt(n) { return n > 0 ? '−' + fmt(n) : '—'; }
 
             document.getElementById('r-gross').textContent = fmt(income);
             setVal('r-exp', negFmt(expenses), true);
             document.getElementById('r-profit').textContent = fmt(profit);
-            setVal('r-pension', negFmt(pension), true);
+
+            // Other income row — show only when non-zero
+            const rowOther = document.getElementById('row-other');
+            if (other > 0) {
+                rowOther.classList.remove('hidden');
+                document.getElementById('r-other').textContent = '+' + fmt(other);
+            } else {
+                rowOther.classList.add('hidden');
+            }
+
+            // Pension row — show gross amount
+            setVal('r-pension', negFmt(pensionGross), true);
+
             setVal('r-pa', negFmt(pa), true);
             document.getElementById('r-taxable').textContent = fmt(taxable);
             setVal('r-tax', negFmt(incomeTax), true);
