@@ -857,6 +857,18 @@
         document.querySelectorAll('input').forEach(el => el.addEventListener('input', sendHeight));
         new ResizeObserver(sendHeight).observe(document.body);
     </script>
+
+    <script>
+        function notifyHeight() {
+            const height = document.documentElement.scrollHeight;
+            window.parent.postMessage({ type: 'resize', height: height }, '*');
+        }
+        // Fire on load and whenever inputs change (in case layout shifts)
+        window.addEventListener('load', notifyHeight);
+        document.addEventListener('input', notifyHeight);
+        document.addEventListener('change', notifyHeight);
+    </script>
+
 </body>
 
 </html>

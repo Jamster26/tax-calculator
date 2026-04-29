@@ -342,8 +342,9 @@
         .demo-frame iframe {
             display: block;
             width: 100%;
-            height: 820px;
+            height: 600px;
             border: none;
+            transition: height 0.2s;
         }
 
         /* HOW IT WORKS */
@@ -714,7 +715,8 @@
                     <div class="dot dot-green"></div>
                     <div class="demo-frame-url">accountingmage.netlify.app/widgets/rollingrealm</div>
                 </div>
-                <iframe src="/widgets/rollingrealm" title="Live tax estimator demo" loading="lazy"></iframe>
+                <iframe id="demo-iframe" src="/widgets/rollingrealm" title="Live tax estimator demo" loading="lazy"
+                    scrolling="no"></iframe>
             </div>
         </div>
     </section>
@@ -948,6 +950,8 @@
             }
         });
     </script>
+
+
 
 </body>
 
