@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — AccountingMage</title>
+    <meta name="description"
+        content="AccountingMage Privacy Policy — how we collect, use, and protect your personal data.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F0D060;
+            --gold-dim: #A08020;
+            --bg-primary: #0A0A0F;
+            --bg-card: #16161F;
+            --border: rgba(212, 175, 55, 0.2);
+            --border-bright: rgba(212, 175, 55, 0.5);
+            --text-primary: #F0EDE0;
+            --text-muted: #9A9080;
+            --text-dim: #6A6058;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212, 175, 55, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* NAV */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.05em;
+            text-decoration: none;
+        }
+
+        .nav-logo span {
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+
+        nav a.nav-back {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            transition: color 0.2s;
+        }
+
+        nav a.nav-back:hover {
+            color: var(--gold);
+        }
+
+        /* CONTENT */
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 4rem 2rem 6rem;
+        }
+
+        .page-eyebrow {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold-dim);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1.15;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.02em;
+        }
+
+        .last-updated {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+        }
+
+        .gold-line {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, var(--gold-dim), transparent);
+            margin-bottom: 3rem;
+        }
+
+        .terms-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .terms-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.85;
+            margin-bottom: 1rem;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0.75rem 0 1rem;
+            padding: 0;
+        }
+
+        ul li {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.75;
+            padding: 0.35rem 0 0.35rem 1.25rem;
+            position: relative;
+        }
+
+        ul li::before {
+            content: '–';
+            position: absolute;
+            left: 0;
+            color: var(--gold-dim);
+        }
+
+        strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .highlight {
+            background: var(--bg-card);
+            border: 1px solid var(--border-bright);
+            border-radius: 6px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.25rem 0;
+        }
+
+        .highlight p {
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+
+        /* TABLE */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.88rem;
+        }
+
+        .data-table th {
+            text-align: left;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold-dim);
+            padding: 0.6rem 0.75rem;
+            border-bottom: 1px solid var(--border-bright);
+        }
+
+        .data-table td {
+            padding: 0.7rem 0.75rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+            line-height: 1.6;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            color: var(--gold-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-text {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 640px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .page {
+                padding: 2.5rem 1rem 4rem;
+            }
+
+            .data-table {
+                font-size: 0.8rem;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="/" class="nav-logo">Accounting<span>Mage</span></a>
+        <a href="/" class="nav-back">← Back to home</a>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="page">
+
+        <p class="page-eyebrow">Legal</p>
+        <h1>Privacy Policy</h1>
+        <p class="last-updated">Last updated: April 2026</p>
+        <div class="gold-line"></div>
+
+        <div class="terms-section">
+            <h2>1. Who We Are</h2>
+            <p>AccountingMage is operated by James Heuze trading as AccountingMage. We provide branded tax estimator
+                widgets for UK bookkeepers and accountants.</p>
+            <p>We are the data controller for the personal data described in this policy. If you have any questions
+                about how we handle your data, contact us at <a
+                    href="mailto:accountingmage@outlook.com">accountingmage@outlook.com</a>.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>2. What Data We Collect</h2>
+            <p>We collect only what we need to deliver our service. This includes:</p>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>When collected</th>
+                        <th>Why</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td>Contact form / purchase</td>
+                        <td>To address you correctly</td>
+                    </tr>
+                    <tr>
+                        <td>Email address</td>
+                        <td>Contact form / purchase</td>
+                        <td>To communicate with you about your subscription</td>
+                    </tr>
+                    <tr>
+                        <td>Firm name</td>
+                        <td>Contact form / purchase</td>
+                        <td>To brand your widget correctly</td>
+                    </tr>
+                    <tr>
+                        <td>Website platform</td>
+                        <td>Contact form</td>
+                        <td>To provide appropriate integration guidance</td>
+                    </tr>
+                    <tr>
+                        <td>Payment information</td>
+                        <td>Purchase</td>
+                        <td>Processed directly by Stripe — we never see or store your card details</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>We do not collect any data from visitors who use the embedded widget on your website. The widget runs
+                entirely client-side and sends no data to our servers.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>3. How We Use Your Data</h2>
+            <p>We use your data only to:</p>
+            <ul>
+                <li>Respond to your enquiry and set up your widget</li>
+                <li>Manage your subscription and process payments</li>
+                <li>Notify you of annual rate updates or changes to our service</li>
+                <li>Comply with legal obligations</li>
+            </ul>
+            <p>We do not use your data for marketing to third parties, profiling, or any automated decision-making.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>4. Legal Basis for Processing</h2>
+            <p>Under UK GDPR, we process your personal data on the following bases:</p>
+            <ul>
+                <li><strong>Contract performance</strong> — processing your name, email, and firm name is necessary to
+                    deliver your subscription</li>
+                <li><strong>Legitimate interests</strong> — to communicate with you about service updates and renewals
+                </li>
+                <li><strong>Legal obligation</strong> — where required to comply with applicable law</li>
+            </ul>
+        </div>
+
+        <div class="terms-section">
+            <h2>5. Who We Share Data With</h2>
+            <p>We share your data only with the following third-party processors, and only to the extent necessary to
+                deliver the service:</p>
+            <ul>
+                <li><strong>Stripe</strong> — payment processing. Your payment data is handled directly by Stripe under
+                    their own <a href="https://stripe.com/gb/privacy" target="_blank">Privacy Policy</a>. We do not
+                    store card details.</li>
+                <li><strong>Netlify</strong> — our hosting provider and form processor. Enquiry form submissions are
+                    received via Netlify. See <a href="https://www.netlify.com/privacy/" target="_blank">Netlify's
+                        Privacy Policy</a>.</li>
+            </ul>
+            <p>We do not sell, rent, or share your personal data with any other third parties.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>6. How Long We Keep Your Data</h2>
+            <p>We retain your data for as long as your subscription is active. If you cancel, we keep your basic account
+                details for up to 12 months for administrative and legal purposes, after which it is deleted.</p>
+            <p>Enquiry form submissions from non-customers are deleted within 6 months if no subscription is taken out.
+            </p>
+        </div>
+
+        <div class="terms-section">
+            <h2>7. Your Rights</h2>
+            <p>Under UK GDPR, you have the following rights regarding your personal data:</p>
+            <ul>
+                <li><strong>Access</strong> — request a copy of the data we hold about you</li>
+                <li><strong>Correction</strong> — ask us to correct inaccurate data</li>
+                <li><strong>Deletion</strong> — ask us to delete your data (subject to any legal obligations to retain
+                    it)</li>
+                <li><strong>Restriction</strong> — ask us to limit how we use your data</li>
+                <li><strong>Portability</strong> — request your data in a portable format</li>
+                <li><strong>Objection</strong> — object to processing based on legitimate interests</li>
+            </ul>
+            <p>To exercise any of these rights, contact us at <a
+                    href="mailto:accountingmage@outlook.com">accountingmage@outlook.com</a>. We will respond within 30
+                days.</p>
+            <p>If you believe we have not handled your data correctly, you have the right to lodge a complaint with the
+                <a href="https://ico.org.uk" target="_blank">Information Commissioner's Office (ICO)</a>.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>8. Cookies & Tracking</h2>
+            <p>The AccountingMage website does not use tracking cookies, analytics scripts, or advertising pixels. We do
+                not track visitor behaviour on this site.</p>
+            <p>Netlify may set functional cookies necessary for form submission and site delivery. These are strictly
+                necessary and do not require consent.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>9. Security</h2>
+            <p>We take reasonable steps to protect your personal data. All data is transmitted over HTTPS. Payments are
+                handled entirely by Stripe, which is PCI DSS compliant. We do not store payment card information.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>10. Changes to This Policy</h2>
+            <p>We may update this Privacy Policy from time to time. If we make material changes, we will notify active
+                subscribers by email. The latest version will always be available at this URL.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>11. Contact</h2>
+            <p>For any privacy-related questions or to exercise your data rights, please contact:<br>
+                <a href="mailto:accountingmage@outlook.com">accountingmage@outlook.com</a>
+            </p>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">AccountingMage</div>
+        <p class="footer-text">
+            © 2026 AccountingMage &nbsp;·&nbsp;
+            <a href="/terms" style="color: var(--text-dim); text-decoration: none;">Terms of Service</a>
+            &nbsp;·&nbsp;
+            <a href="/privacy" style="color: var(--text-dim); text-decoration: none;">Privacy Policy</a>
+        </p>
+    </footer>
+
+</body>
+
+</html>

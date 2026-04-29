@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service — AccountingMage</title>
+    <meta name="description"
+        content="AccountingMage Terms of Service — what's included, cancellation, refunds, and liability.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F0D060;
+            --gold-dim: #A08020;
+            --bg-primary: #0A0A0F;
+            --bg-card: #16161F;
+            --border: rgba(212, 175, 55, 0.2);
+            --border-bright: rgba(212, 175, 55, 0.5);
+            --text-primary: #F0EDE0;
+            --text-muted: #9A9080;
+            --text-dim: #6A6058;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212, 175, 55, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* NAV */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.05em;
+            text-decoration: none;
+        }
+
+        .nav-logo span {
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+
+        nav a.nav-back {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            transition: color 0.2s;
+        }
+
+        nav a.nav-back:hover {
+            color: var(--gold);
+        }
+
+        /* CONTENT */
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 4rem 2rem 6rem;
+        }
+
+        .page-eyebrow {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold-dim);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1.15;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.02em;
+        }
+
+        .last-updated {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+        }
+
+        .gold-line {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, var(--gold-dim), transparent);
+            margin-bottom: 3rem;
+        }
+
+        /* SECTIONS */
+        .terms-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .terms-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.85;
+            margin-bottom: 1rem;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0.75rem 0 1rem;
+            padding: 0;
+        }
+
+        ul li {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.75;
+            padding: 0.35rem 0 0.35rem 1.25rem;
+            position: relative;
+        }
+
+        ul li::before {
+            content: '–';
+            position: absolute;
+            left: 0;
+            color: var(--gold-dim);
+        }
+
+        strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* HIGHLIGHT BOX */
+        .highlight {
+            background: var(--bg-card);
+            border: 1px solid var(--border-bright);
+            border-radius: 6px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.25rem 0;
+        }
+
+        .highlight p {
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            color: var(--gold-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-text {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 640px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .page {
+                padding: 2.5rem 1rem 4rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="/" class="nav-logo">Accounting<span>Mage</span></a>
+        <a href="/" class="nav-back">← Back to home</a>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="page">
+
+        <p class="page-eyebrow">Legal</p>
+        <h1>Terms of Service</h1>
+        <p class="last-updated">Last updated: April 2026</p>
+        <div class="gold-line"></div>
+
+        <div class="terms-section">
+            <h2>1. Overview</h2>
+            <p>These Terms of Service govern your use of the AccountingMage widget service, operated by James Heuze
+                trading as AccountingMage ("we", "us", "our"). By purchasing a subscription or using any AccountingMage
+                widget, you agree to these terms.</p>
+            <p>AccountingMage provides branded, self-assessment tax estimator widgets for UK bookkeepers and
+                accountants, embedded on your website via a supplied code snippet.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>2. The Service</h2>
+            <p>Your subscription includes:</p>
+            <ul>
+                <li>A custom-branded tax estimator widget, designed to your firm's colours and branding</li>
+                <li>Hosting and maintenance of the widget on our infrastructure</li>
+                <li>Annual update of HMRC tax rates each April at no additional charge</li>
+                <li>An embed snippet for integration into your website</li>
+            </ul>
+            <p>The widget is provided as an estimation tool only. It does not constitute financial, tax, or legal
+                advice. A disclaimer to this effect is included within every widget.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>3. Subscription & Payment</h2>
+            <p>AccountingMage subscriptions are billed annually at <strong>£99.99 per year</strong>. Payment is
+                processed securely via Stripe.</p>
+            <p>Your subscription renews automatically each year on the anniversary of your purchase date. You will
+                receive advance notice of renewal from Stripe. Continued use of the service constitutes acceptance of
+                the renewal charge.</p>
+            <p>If payment fails on renewal, we will make reasonable attempts to notify you. If payment is not resolved
+                within 14 days, your widget may be suspended until payment is received.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>4. Cancellation</h2>
+            <div class="highlight">
+                <p>You may cancel your subscription at any time. <strong>If you cancel, your widget will remain fully
+                        active and hosted until the end of your current paid period.</strong> No partial refunds are
+                    issued for unused time within a billing period.</p>
+            </div>
+            <p>To cancel, you can do so directly through the Stripe billing portal using the link provided in your
+                subscription confirmation email, or by contacting us at <a
+                    href="mailto:accountingmage@outlook.com">accountingmage@outlook.com</a>.</p>
+            <p>Once your subscription ends, the widget will be taken offline and the embed snippet will no longer
+                display content on your website.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>5. Refund Policy</h2>
+            <div class="highlight">
+                <p><strong>New subscriptions:</strong> We offer a full refund within <strong>30 days of your initial
+                        purchase</strong> if you are not satisfied with the service. To request a refund, contact us at
+                    <a href="mailto:accountingmage@outlook.com">accountingmage@outlook.com</a> within this window.</p>
+            </div>
+            <p><strong>Renewals:</strong> The 30-day refund policy applies to initial purchases only and does not extend
+                to annual renewals. If you do not wish to renew, please cancel before your renewal date.</p>
+            <p>Refunds are processed via Stripe and typically appear within 5–10 business days depending on your card
+                issuer.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>6. Accuracy & Disclaimer</h2>
+            <p>We take reasonable care to ensure the tax calculations within the widget reflect current HMRC rates for
+                England and Wales. However:</p>
+            <ul>
+                <li>The widget provides estimates only and should not be relied upon as formal tax advice</li>
+                <li>Tax rules are subject to change — we update the widget each April following the Budget, but cannot
+                    guarantee real-time accuracy at all times</li>
+                <li>We are not responsible for any decisions made by you or your clients based on widget output</li>
+                <li>We recommend all clients consult a qualified accountant or bookkeeper for formal tax planning</li>
+            </ul>
+        </div>
+
+        <div class="terms-section">
+            <h2>7. Intellectual Property</h2>
+            <p>The widget code, design, and underlying calculations remain the intellectual property of AccountingMage.
+                Your subscription grants you a non-exclusive, non-transferable licence to embed and display the widget
+                on a single website for the duration of your paid subscription.</p>
+            <p>You may not resell, sublicence, or redistribute the widget or its code to third parties.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>8. Limitation of Liability</h2>
+            <p>To the fullest extent permitted by law, AccountingMage shall not be liable for any indirect, incidental,
+                or consequential damages arising from your use of the widget or service, including but not limited to
+                errors in tax estimates, client decisions, or website downtime.</p>
+            <p>Our total liability to you in any 12-month period shall not exceed the amount you have paid to us in that
+                period.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>9. Your Data</h2>
+            <p>When you submit an enquiry or purchase a subscription, we collect your name, email address, and firm
+                details. This information is used solely to deliver and manage your AccountingMage subscription.</p>
+            <p>We do not sell, share, or pass your personal data to third parties, except to Stripe for payment
+                processing (governed by <a href="https://stripe.com/gb/privacy" target="_blank">Stripe's Privacy
+                    Policy</a>) and Netlify for form handling. We retain your data for as long as your subscription is
+                active and for a reasonable period thereafter for administrative purposes.</p>
+            <p>You have the right to request access to, correction of, or deletion of your personal data at any time by
+                contacting us at <a href="mailto:accountingmage@outlook.com">accountingmage@outlook.com</a>.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>10. Governing Law</h2>
+            <p>These terms are governed by the laws of England and Wales. Any disputes arising in connection with these
+                terms or the AccountingMage service shall be subject to the exclusive jurisdiction of the courts of
+                England and Wales.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>11. Changes to These Terms</h2>
+            <p>We may update these terms from time to time. If we make material changes, we will notify you by email at
+                least 14 days before they take effect. Continued use of the service after that date constitutes
+                acceptance of the updated terms.</p>
+        </div>
+
+        <div class="terms-section">
+            <h2>12. Contact</h2>
+            <p>If you have any questions about these terms, please contact us at:<br>
+                <a href="mailto:accountingmage@outlook.com">accountingmage@outlook.com</a>
+            </p>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">AccountingMage</div>
+        <p class="footer-text">
+            © 2026 AccountingMage &nbsp;·&nbsp; <a href="/terms" style="color: var(--text-dim);">Terms of Service</a>
+        </p>
+    </footer>
+
+</body>
+
+</html>
