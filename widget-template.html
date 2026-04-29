@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Assessment Tax Estimator</title>
+
+    <!-- Shared tax rates — update rates.js each April, all widgets update automatically -->
+    <script src="https://golden-douhua-8dfce0.netlify.app/rates.js"></script>
+
+    <!-- Inline fallback — used when opening locally without Netlify -->
+    <script>
+        if (typeof TAX_RATES === 'undefined') {
+            var TAX_RATES = {
+                TAX_YEAR: '2025/26',
+                STD_PA: 12570,
+                BASIC_LIMIT: 50270,
+                HIGHER_LIMIT: 125140,
+                BASIC_RATE: 0.20,
+                HIGHER_RATE: 0.40,
+                ADDITIONAL_RATE: 0.45,
+                PA_TAPER_START: 100000,
+                C4_LOWER: 12570,
+                C4_UPPER: 50270,
+                C4_LOWER_RATE: 0.06,
+                C4_UPPER_RATE: 0.02,
+                C2_THRESHOLD: 12570,
+                C2_ANNUAL: 179,
+            };
+        }
+    </script>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito+Sans:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+
+    <script>
+        /* ============================================================
+           BRAND CONFIG — edit this block for each customer
+           ============================================================ */
+        const BRAND = {
+            // Practice details
+            practiceDisplayName: 'Hartwell Bookkeeping',
+            ctaText: 'Book a Free Consultation →',
+            ctaUrl: 'https://hartwellbookkeeping.co.uk/contact',
+
+            // Colours (use hex or any valid CSS colour)
+            colourAccent: '#c4637a',
+            colourAccentLight: '#f5dde3',
+            colourAccentPale: '#fdf6f8',
+            colourGold: '#b8963e',
+            colourGoldLight: '#f5ecd4',
+            colourNavy: '#2c2c3e',
+            colourBodyText: '#444455',
+            colourMuted: '#888899',
+            colourBorder: '#e8e2ec',
+            colourBg: '#fafaf9',
+
+            // Widget header text
+            eyebrow: 'Free Estimator',
+            heading: 'How Much Tax Will You Owe?',
+            subheading: 'Enter your income and expenses below for an instant self-assessment estimate. No sign-up, no data stored — just a clear number in seconds.',
+
+            // Input labels & hints
+            label_income: 'Self-Employment Income',
+            hint_income: 'Your total turnover / gross receipts',
+            label_expenses: 'Business Expenses',
+            hint_expenses: 'Costs wholly & exclusively for your business',
+            label_other: 'Other Income (employment / savings / rental)',
+            hint_other: 'Include any PAYE salary, rental income, dividends etc.',
+            label_pension: 'Pension Contributions',
+            hint_pension: 'Personal pension contributions reduce your taxable income',
+            label_poa: 'Payments on Account Already Made',
+            hint_poa: 'Total advance payments already made to HMRC this year',
+
+            // Results panel labels
+            label_takeHome: 'Estimated Take-Home (self-employment)',
+            label_totalTax: 'Total Tax Due',
+            label_monthly: '/ month to set aside',
+        };
+        /* ============================================================ */
+    </script>
+
+    <style>
+        :root {
+            --accent: #c4637a;
+            --accent-light: #f5dde3;
+            --accent-pale: #fdf6f8;
+            --gold: #b8963e;
+            --gold-light: #f5ecd4;
+            --navy: #2c2c3e;
+            --body-text: #444455;
+            --muted: #888899;
+            --border: #e8e2ec;
+            --white: #ffffff;
+            --bg: #fafaf9;
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            background: transparent;
+            color: var(--body-text);
+        }
+
+        .widget {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .widget-header {
+            text-align: center;
+            margin-bottom: 36px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .widget-eyebrow {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .widget-heading {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .widget-sub {
+            font-size: 0.88rem;
+            color: var(--muted);
+            max-width: 520px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 700px) {
+            .widget-heading {
+                font-size: 1.7rem;
+            }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            align-items: start;
+        }
+
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .widget {
+                padding: 16px;
+            }
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 30px;
+        }
+
+        .card+.card {
+            margin-top: 20px;
+        }
+
+        .section-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 4px;
+        }
+
+        .card-sub {
+            font-size: 0.78rem;
+            color: var(--muted);
+            line-height: 1.5;
+            margin-bottom: 26px;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        .field:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin-bottom: 7px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .prefix {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 0.95rem;
+            pointer-events: none;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 12px 12px 30px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 0.95rem;
+            color: var(--navy);
+            background: var(--bg);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -moz-appearance: textfield;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(196, 99, 122, 0.1);
+            background: var(--white);
+        }
+
+        .hint {
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        .results-card {
+            background: var(--navy);
+            border-radius: var(--radius);
+            padding: 30px;
+        }
+
+        .results-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 6px;
+        }
+
+        .results-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 26px;
+        }
+
+        .r-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 9px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .r-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .r-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            max-width: 58%;
+            line-height: 1.3;
+        }
+
+        .r-val {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .r-val.neg {
+            color: #f0a0b4;
+        }
+
+        .r-val.pos {
+            color: #90dfb0;
+        }
+
+        .bar-wrap {
+            margin: 22px 0 8px;
+            height: 7px;
+            border-radius: 4px;
+            display: flex;
+            gap: 2px;
+            overflow: hidden;
+        }
+
+        .b {
+            border-radius: 3px;
+            transition: flex 0.4s ease;
+        }
+
+        .b-home {
+            background: #90dfb0;
+        }
+
+        .b-tax {
+            background: #f0a0b4;
+        }
+
+        .b-ni {
+            background: var(--gold);
+        }
+
+        .bar-legend {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .bl {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.68rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .bl-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+        }
+
+        .total-box {
+            background: rgba(184, 150, 62, 0.12);
+            border: 1px solid rgba(184, 150, 62, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .total-lbl {
+            font-size: 0.68rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(245, 236, 212, 0.7);
+            margin-bottom: 8px;
+        }
+
+        .total-amt {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .total-monthly {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.35);
+            margin-top: 6px;
+        }
+
+        .takehome-box {
+            background: rgba(144, 223, 176, 0.08);
+            border: 1px solid rgba(144, 223, 176, 0.2);
+            border-radius: 10px;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .th-lbl {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        .th-val {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #90dfb0;
+        }
+
+        .cta-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .cta-btn:hover {
+            filter: brightness(0.9);
+            transform: translateY(-1px);
+        }
+
+        .disclaimer {
+            font-size: 0.66rem;
+            color: rgba(255, 255, 255, 0.22);
+            text-align: center;
+            margin-top: 12px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="widget">
+
+        <div class="widget-header">
+            <div class="widget-eyebrow" id="b-eyebrow"></div>
+            <h2 class="widget-heading" id="b-heading"></h2>
+            <p class="widget-sub" id="b-subheading"></p>
+        </div>
+
+        <div class="grid">
+
+            <!-- LEFT: Inputs -->
+            <div>
+                <div class="card">
+                    <div class="section-label">Step 1</div>
+                    <div class="card-title">Your Income &amp; Expenses</div>
+                    <div class="card-sub">Enter your figures for 6 April 2025 – 5 April 2026</div>
+
+                    <div class="field">
+                        <label id="lbl-income"></label>
+                        <div class="input-wrap">
+                            <span class="prefix">£</span>
+                            <input type="number" id="income" value="35000" min="0" step="500">
+                        </div>
+                        <div class="hint" id="hint-income"></div>
+                    </div>
+
+                    <div class="field">
+                        <label id="lbl-expenses"></label>
+                        <div class="input-wrap">
+                            <span class="prefix">£</span>
+                            <input type="number" id="expenses" value="5000" min="0" step="100">
+                        </div>
+                        <div class="hint" id="hint-expenses"></div>
+                    </div>
+
+                    <div class="field">
+                        <label id="lbl-other"></label>
+                        <div class="input-wrap">
+                            <span class="prefix">£</span>
+                            <input type="number" id="other" value="0" min="0" step="100">
+                        </div>
+                        <div class="hint" id="hint-other"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-label">Step 2</div>
+                    <div class="card-title">Deductions &amp; Payments</div>
+                    <div class="card-sub">Optional — leave at zero if not applicable</div>
+
+                    <div class="field">
+                        <label id="lbl-pension"></label>
+                        <div class="input-wrap">
+                            <span class="prefix">£</span>
+                            <input type="number" id="pension" value="0" min="0" step="100">
+                        </div>
+                        <div class="hint" id="hint-pension"></div>
+                    </div>
+
+                    <div class="field">
+                        <label id="lbl-poa"></label>
+                        <div class="input-wrap">
+                            <span class="prefix">£</span>
+                            <input type="number" id="poa" value="0" min="0" step="100">
+                        </div>
+                        <div class="hint" id="hint-poa"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Results -->
+            <div>
+                <div class="results-card">
+                    <div class="results-label">Your Estimate</div>
+                    <div class="results-title" id="r-title"></div>
+
+                    <div class="r-row">
+                        <span class="r-label">Gross Income</span>
+                        <span class="r-val" id="r-gross">£35,000</span>
+                    </div>
+                    <div class="r-row">
+                        <span class="r-label">Less: Business Expenses</span>
+                        <span class="r-val neg" id="r-exp">−£5,000</span>
+                    </div>
+                    <div class="r-row">
+                        <span class="r-label">Net Profit</span>
+                        <span class="r-val" id="r-profit">£30,000</span>
+                    </div>
+                    <div class="r-row">
+                        <span class="r-label">Less: Pension Contributions</span>
+                        <span class="r-val neg" id="r-pension">−£0</span>
+                    </div>
+                    <div class="r-row">
+                        <span class="r-label">Less: Personal Allowance</span>
+                        <span class="r-val neg" id="r-pa">−£12,570</span>
+                    </div>
+                    <div class="r-row">
+                        <span class="r-label">Taxable Income</span>
+                        <span class="r-val" id="r-taxable">£17,430</span>
+                    </div>
+
+                    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:14px 0;">
+
+                    <div class="r-row">
+                        <span class="r-label">Income Tax (20% basic rate)</span>
+                        <span class="r-val neg" id="r-tax">£3,486</span>
+                    </div>
+                    <div class="r-row">
+                        <span class="r-label">Class 4 NI (6% / 2%)</span>
+                        <span class="r-val neg" id="r-c4">£1,038</span>
+                    </div>
+                    <div class="r-row">
+                        <span class="r-label">Class 2 NI (£3.45/week)</span>
+                        <span class="r-val neg" id="r-c2">£179</span>
+                    </div>
+                    <div class="r-row">
+                        <span class="r-label">Less: Payments on Account</span>
+                        <span class="r-val pos" id="r-poa">−£0</span>
+                    </div>
+
+                    <div class="bar-wrap">
+                        <div class="b b-home" id="b-home" style="flex:25476"></div>
+                        <div class="b b-tax" id="b-tax" style="flex:3486"></div>
+                        <div class="b b-ni" id="b-ni" style="flex:1217"></div>
+                    </div>
+                    <div class="bar-legend">
+                        <div class="bl">
+                            <div class="bl-dot" style="background:#90dfb0"></div>Take-home
+                        </div>
+                        <div class="bl">
+                            <div class="bl-dot" style="background:#f0a0b4"></div>Income Tax
+                        </div>
+                        <div class="bl">
+                            <div class="bl-dot" style="background:#b8963e"></div>NI
+                        </div>
+                    </div>
+
+                    <div class="total-box">
+                        <div class="total-lbl" id="lbl-totalTax"></div>
+                        <div class="total-amt" id="r-total">£4,703</div>
+                        <div class="total-monthly" id="r-monthly">≈ £392 / month to set aside</div>
+                    </div>
+
+                    <div class="takehome-box">
+                        <span class="th-lbl" id="lbl-takeHome"></span>
+                        <span class="th-val" id="r-takehome">£25,476</span>
+                    </div>
+
+                    <a class="cta-btn" id="cta-btn" href="#" target="_blank"></a>
+
+                    <div class="disclaimer">
+                        Estimates only — based on <span id="d-taxyear"></span> HMRC rates for England &amp; Wales.<br>
+                        Assumes all income taxed as standard income (dividends &amp; savings may differ).<br>
+                        Does not include student loans, child benefit charges, or other adjustments.<br>
+                        Not a substitute for professional advice. Always consult a qualified bookkeeper.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // ── Apply brand config to DOM ──────────────────────────────
+        (function applyBrand() {
+            const r = document.documentElement.style;
+            r.setProperty('--accent', BRAND.colourAccent);
+            r.setProperty('--accent-light', BRAND.colourAccentLight);
+            r.setProperty('--accent-pale', BRAND.colourAccentPale);
+            r.setProperty('--gold', BRAND.colourGold);
+            r.setProperty('--gold-light', BRAND.colourGoldLight);
+            r.setProperty('--navy', BRAND.colourNavy);
+            r.setProperty('--body-text', BRAND.colourBodyText);
+            r.setProperty('--muted', BRAND.colourMuted);
+            r.setProperty('--border', BRAND.colourBorder);
+            r.setProperty('--bg', BRAND.colourBg);
+
+            document.getElementById('b-eyebrow').textContent = BRAND.eyebrow + ' · ' + TAX_RATES.TAX_YEAR;
+            document.getElementById('b-heading').textContent = BRAND.heading;
+            document.getElementById('b-subheading').textContent = BRAND.subheading;
+            document.getElementById('r-title').textContent = 'Tax Breakdown ' + TAX_RATES.TAX_YEAR;
+
+            document.getElementById('lbl-income').textContent = BRAND.label_income;
+            document.getElementById('hint-income').textContent = BRAND.hint_income;
+            document.getElementById('lbl-expenses').textContent = BRAND.label_expenses;
+            document.getElementById('hint-expenses').textContent = BRAND.hint_expenses;
+            document.getElementById('lbl-other').textContent = BRAND.label_other;
+            document.getElementById('hint-other').textContent = BRAND.hint_other;
+            document.getElementById('lbl-pension').textContent = BRAND.label_pension;
+            document.getElementById('hint-pension').textContent = BRAND.hint_pension;
+            document.getElementById('lbl-poa').textContent = BRAND.label_poa;
+            document.getElementById('hint-poa').textContent = BRAND.hint_poa;
+
+            document.getElementById('lbl-totalTax').textContent = BRAND.label_totalTax;
+            document.getElementById('lbl-takeHome').textContent = BRAND.label_takeHome;
+
+            const cta = document.getElementById('cta-btn');
+            cta.textContent = BRAND.ctaText;
+            cta.href = BRAND.ctaUrl;
+
+            document.getElementById('d-taxyear').textContent = TAX_RATES.TAX_YEAR;
+        })();
+
+        // ── Calculation engine ─────────────────────────────────────
+        function fmt(n) {
+            return '£' + Math.max(0, Math.round(n)).toLocaleString('en-GB');
+        }
+
+        function calcIT(taxable) {
+            if (taxable <= 0) return 0;
+            const basic = TAX_RATES.BASIC_LIMIT - TAX_RATES.STD_PA;
+            const higher = TAX_RATES.HIGHER_LIMIT - TAX_RATES.STD_PA;
+            if (taxable <= basic) return taxable * TAX_RATES.BASIC_RATE;
+            if (taxable <= higher) return basic * TAX_RATES.BASIC_RATE + (taxable - basic) * TAX_RATES.HIGHER_RATE;
+            return basic * TAX_RATES.BASIC_RATE
+                + (higher - basic) * TAX_RATES.HIGHER_RATE
+                + (taxable - higher) * TAX_RATES.ADDITIONAL_RATE;
+        }
+
+        function calcC4(profit) {
+            if (profit <= TAX_RATES.C4_LOWER) return 0;
+            const lower = (Math.min(profit, TAX_RATES.C4_UPPER) - TAX_RATES.C4_LOWER) * TAX_RATES.C4_LOWER_RATE;
+            const upper = profit > TAX_RATES.C4_UPPER ? (profit - TAX_RATES.C4_UPPER) * TAX_RATES.C4_UPPER_RATE : 0;
+            return lower + upper;
+        }
+
+        function run() {
+            const income = +document.getElementById('income').value || 0;
+            const expenses = +document.getElementById('expenses').value || 0;
+            const other = +document.getElementById('other').value || 0;
+            const pension = +document.getElementById('pension').value || 0;
+            const poa = +document.getElementById('poa').value || 0;
+            let pa = TAX_RATES.STD_PA;
+
+            const profit = Math.max(0, income - expenses);
+            const totalIncome = profit + other;
+
+            if (totalIncome > TAX_RATES.PA_TAPER_START) {
+                pa = Math.max(0, TAX_RATES.STD_PA - Math.floor((totalIncome - TAX_RATES.PA_TAPER_START) / 2));
+            }
+            pa = Math.min(pa, TAX_RATES.STD_PA);
+
+            const taxable = Math.max(0, totalIncome - pa - pension);
+            const incomeTax = calcIT(taxable);
+            const c4 = calcC4(profit);
+            const c2 = profit > TAX_RATES.C2_THRESHOLD ? TAX_RATES.C2_ANNUAL : 0;
+            const totalTax = Math.max(0, incomeTax + c4 + c2 - poa);
+            const takeHome = Math.max(0, profit - incomeTax - c4 - c2);
+
+            function setVal(id, display, isNeg) {
+                const el = document.getElementById(id);
+                el.textContent = display;
+                el.classList.remove('neg', 'pos');
+                if (display !== '£0') el.classList.add(isNeg ? 'neg' : 'pos');
+            }
+
+            function negFmt(n) { return n > 0 ? '−' + fmt(n) : '£0'; }
+
+            document.getElementById('r-gross').textContent = fmt(income);
+            setVal('r-exp', negFmt(expenses), true);
+            document.getElementById('r-profit').textContent = fmt(profit);
+            setVal('r-pension', negFmt(pension), true);
+            setVal('r-pa', negFmt(pa), true);
+            document.getElementById('r-taxable').textContent = fmt(taxable);
+            setVal('r-tax', negFmt(incomeTax), true);
+            setVal('r-c4', negFmt(c4), true);
+            setVal('r-c2', negFmt(c2), true);
+            setVal('r-poa', negFmt(poa), true);
+            document.getElementById('r-total').textContent = fmt(totalTax);
+            document.getElementById('r-monthly').textContent = '≈ ' + fmt(totalTax / 12) + ' ' + BRAND.label_monthly;
+            document.getElementById('r-takehome').textContent = fmt(takeHome);
+
+            document.getElementById('b-home').style.flex = Math.max(0, takeHome);
+            document.getElementById('b-tax').style.flex = incomeTax;
+            document.getElementById('b-ni').style.flex = c4 + c2;
+        }
+
+        document.querySelectorAll('input').forEach(el => el.addEventListener('input', run));
+        run();
+
+        // ── Auto-resize for iframe embedding ──────────────────────
+        function sendHeight() {
+            window.parent.postMessage({ type: 'lmo-widget-height', height: document.body.scrollHeight }, '*');
+        }
+        sendHeight();
+        window.addEventListener('resize', sendHeight);
+        document.querySelectorAll('input').forEach(el => el.addEventListener('input', sendHeight));
+        new ResizeObserver(sendHeight).observe(document.body);
+    </script>
+</body>
+
+</html>
