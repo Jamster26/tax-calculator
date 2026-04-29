@@ -26,7 +26,6 @@
             --gold-light: #F0D060;
             --gold-dim: #A08020;
             --bg-primary: #0A0A0F;
-            --bg-secondary: #111118;
             --bg-card: #16161F;
             --bg-card-hover: #1C1C28;
             --border: rgba(212, 175, 55, 0.2);
@@ -48,7 +47,6 @@
             overflow-x: hidden;
         }
 
-        /* ── BACKGROUND TEXTURE ── */
         body::before {
             content: '';
             position: fixed;
@@ -60,7 +58,7 @@
             z-index: 0;
         }
 
-        /* ── NAV ── */
+        /* NAV */
         nav {
             position: sticky;
             top: 0;
@@ -88,6 +86,12 @@
             font-weight: 400;
         }
 
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
         nav a.nav-link {
             color: var(--text-muted);
             text-decoration: none;
@@ -99,12 +103,6 @@
 
         nav a.nav-link:hover {
             color: var(--gold);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
         }
 
         .nav-cta {
@@ -121,13 +119,12 @@
             border-color: var(--gold) !important;
         }
 
-        /* ── SECTIONS ── */
         section {
             position: relative;
             z-index: 1;
         }
 
-        /* ── HERO ── */
+        /* HERO */
         .hero {
             padding: 6rem 2rem 5rem;
             text-align: center;
@@ -194,7 +191,6 @@
 
         .hero-description {
             font-size: 1.1rem;
-            font-weight: 400;
             color: var(--text-muted);
             line-height: 1.8;
             max-width: 600px;
@@ -230,6 +226,12 @@
             transform: translateY(-1px);
         }
 
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .btn-secondary {
             padding: 0.875rem 2rem;
             background: transparent;
@@ -253,15 +255,13 @@
             transform: translateY(-1px);
         }
 
-        /* ── DIVIDER ── */
-        .divider {
-            width: 60px;
+        .gold-line {
+            width: 100%;
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            margin: 0 auto;
+            background: linear-gradient(90deg, transparent 0%, var(--border) 20%, var(--border-bright) 50%, var(--border) 80%, transparent 100%);
         }
 
-        /* ── DEMO SECTION ── */
+        /* DEMO */
         .demo-section {
             padding: 5rem 2rem;
             max-width: 900px;
@@ -301,7 +301,7 @@
             border: 1px solid var(--border-bright);
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 0 60px rgba(212, 175, 55, 0.08), 0 0 0 1px rgba(212, 175, 55, 0.05);
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.08);
         }
 
         .demo-frame-bar {
@@ -346,7 +346,7 @@
             border: none;
         }
 
-        /* ── HOW IT WORKS ── */
+        /* HOW IT WORKS */
         .how-section {
             padding: 5rem 2rem;
             max-width: 1000px;
@@ -387,7 +387,6 @@
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 0.5rem;
-            letter-spacing: 0.02em;
         }
 
         .step-desc {
@@ -396,7 +395,7 @@
             line-height: 1.7;
         }
 
-        /* ── FEATURES ── */
+        /* FEATURES */
         .features-section {
             padding: 5rem 2rem;
             max-width: 1000px;
@@ -440,7 +439,7 @@
             line-height: 1.7;
         }
 
-        /* ── PRICING ── */
+        /* PRICING */
         .pricing-section {
             padding: 5rem 2rem;
             max-width: 500px;
@@ -493,23 +492,18 @@
             border-bottom: none;
         }
 
-        .price-features li::before {
-            content: '';
-            width: 16px;
-            height: 16px;
+        .check {
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            background: rgba(212, 175, 55, 0.15);
+            background: rgba(212, 175, 55, 0.12);
             border: 1px solid var(--gold-dim);
             flex-shrink: 0;
-            position: relative;
-        }
-
-        .price-features li::after {
-            content: '✓';
-            position: absolute;
-            font-size: 0.65rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
             color: var(--gold);
-            margin-left: -1.35rem;
         }
 
         .price-note {
@@ -519,7 +513,7 @@
             line-height: 1.6;
         }
 
-        /* ── CONTACT ── */
+        /* CONTACT */
         .contact-section {
             padding: 5rem 2rem;
             max-width: 600px;
@@ -559,6 +553,7 @@
             color: var(--text-primary);
             transition: border-color 0.2s;
             outline: none;
+            width: 100%;
         }
 
         input:focus,
@@ -581,13 +576,56 @@
             background: var(--bg-card);
         }
 
-        /* ── FOOTER ── */
+        /* SUCCESS STATE */
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-bright);
+            border-radius: 8px;
+            margin-top: 3rem;
+        }
+
+        .form-success.visible {
+            display: block;
+        }
+
+        .success-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px solid var(--gold-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin: 0 auto 1.5rem;
+        }
+
+        .success-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.25rem;
+            color: var(--gold);
+            margin-bottom: 0.75rem;
+        }
+
+        .success-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* FOOTER */
         footer {
             border-top: 1px solid var(--border);
             padding: 2rem;
             text-align: center;
             position: relative;
             z-index: 1;
+            margin-top: 2rem;
         }
 
         .footer-logo {
@@ -603,15 +641,6 @@
             line-height: 1.6;
         }
 
-        /* ── GOLD LINE SEPARATOR ── */
-        .gold-line {
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent 0%, var(--border) 20%, var(--border-bright) 50%, var(--border) 80%, transparent 100%);
-            margin: 0;
-        }
-
-        /* ── RESPONSIVE ── */
         @media (max-width: 640px) {
             nav {
                 padding: 1rem;
@@ -651,7 +680,7 @@
     <!-- HERO -->
     <section>
         <div class="hero">
-            <div class="hero-eyebrow">For bookkeepers & accountants</div>
+            <div class="hero-eyebrow">For bookkeepers &amp; accountants</div>
             <h1>
                 AccountingMage
                 <span class="subtitle-line">A tax tool your clients will actually use</span>
@@ -675,18 +704,17 @@
             <div class="section-header">
                 <p class="section-eyebrow">Live demo</p>
                 <h2>Your widget. Your brand.</h2>
-                <p class="section-sub">This is a real, working example — try it yourself. Your clients get this, branded
-                    to your firm.</p>
+                <p class="section-sub">This is a real, working example — try it yourself. Your clients get this,
+                    branded to your firm.</p>
             </div>
             <div class="demo-frame">
                 <div class="demo-frame-bar">
                     <div class="dot dot-red"></div>
                     <div class="dot dot-yellow"></div>
                     <div class="dot dot-green"></div>
-                    <div class="demo-frame-url">accountingmage.netlify.app/widgets/rollingrealm</div>
+                    <div class="demo-frame-url">accountingmage.netlify.app/outreach/rollingrealm</div>
                 </div>
-                <iframe src="/widgets/rollingrealm" title="Live tax estimator demo" loading="lazy">
-                </iframe>
+                <iframe src="/outreach/rollingrealm" title="Live tax estimator demo" loading="lazy"></iframe>
             </div>
         </div>
     </section>
@@ -745,8 +773,8 @@
                 <div class="feature-card">
                     <div class="feature-icon">⚖️</div>
                     <div class="feature-title">HMRC-accurate calculations</div>
-                    <p class="feature-desc">Income tax, Class 2 & Class 4 NI, personal allowance, pension relief, and
-                        other income — all calculated correctly.</p>
+                    <p class="feature-desc">Income tax, Class 2 &amp; Class 4 NI, personal allowance, pension relief,
+                        and other income — all calculated correctly.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🎨</div>
@@ -796,14 +824,14 @@
                 <div class="price-amount">£99.99</div>
                 <div class="price-period">per year — everything included</div>
                 <ul class="price-features">
-                    <li>Custom branded widget for your firm</li>
-                    <li>Hosted & maintained by us</li>
-                    <li>Annual HMRC rate updates</li>
-                    <li>Embed on any website platform</li>
-                    <li>Mobile responsive</li>
-                    <li>Setup included — no extra charge</li>
+                    <li><span class="check">✓</span> Custom branded widget for your firm</li>
+                    <li><span class="check">✓</span> Hosted &amp; maintained by us</li>
+                    <li><span class="check">✓</span> Annual HMRC rate updates</li>
+                    <li><span class="check">✓</span> Embed on any website platform</li>
+                    <li><span class="check">✓</span> Mobile responsive</li>
+                    <li><span class="check">✓</span> Setup included — no extra charge</li>
                 </ul>
-                <a href="#contact" class="btn-primary" style="width: 100%; text-align: center; display: block;">Get
+                <a href="#contact" class="btn-primary" style="width:100%;text-align:center;display:block;">Get
                     started</a>
                 <p class="price-note">Less than £2 a week. Cancel any time — though your widget simply stops updating if
                     you do.</p>
@@ -822,7 +850,21 @@
                 <p class="section-sub">Tell us a bit about your firm and we'll get your branded widget built and ready
                     to go.</p>
             </div>
-            <form class="contact-form" action="mailto:accountingmage@outlook.com" method="get" enctype="text/plain">
+
+            <!--
+                Netlify Forms: add data-netlify="true" and a matching name attribute.
+                Netlify detects this at deploy time and wires up the form automatically.
+                Submissions appear in your Netlify dashboard → Forms, and can email you.
+            -->
+            <form class="contact-form" id="contact-form" name="contact" method="POST" data-netlify="true"
+                netlify-honeypot="bot-field">
+                <!-- Required by Netlify when submitting via fetch -->
+                <input type="hidden" name="form-name" value="contact" />
+                <!-- Honeypot — invisible to humans, catches bots -->
+                <p style="display:none;">
+                    <label>Don't fill this out: <input name="bot-field" /></label>
+                </p>
+
                 <div class="form-group">
                     <label for="name">Your name</label>
                     <input type="text" id="name" name="name" placeholder="Jane Smith" required>
@@ -843,7 +885,7 @@
                         <option>Squarespace</option>
                         <option>Wix</option>
                         <option>Webflow</option>
-                        <option>Custom / Other</option>
+                        <option>React / Custom</option>
                         <option>Not sure</option>
                     </select>
                 </div>
@@ -852,8 +894,17 @@
                     <textarea id="message" name="message"
                         placeholder="Brand colours, logo, any questions..."></textarea>
                 </div>
-                <button type="submit" class="btn-primary" style="width: 100%;">Send enquiry</button>
+                <button type="submit" class="btn-primary" id="submit-btn" style="width:100%;">Send enquiry</button>
             </form>
+
+            <!-- Shown after successful submission instead of redirecting away -->
+            <div class="form-success" id="form-success">
+                <div class="success-icon">✦</div>
+                <div class="success-title">Enquiry received</div>
+                <p class="success-text">
+                    Thanks — we'll be in touch within one working day to get your widget built and branded.
+                </p>
+            </div>
         </div>
     </section>
 
@@ -866,6 +917,37 @@
                 style="color: var(--text-dim); text-decoration: none;">accountingmage@outlook.com</a>
         </p>
     </footer>
+
+    <script>
+        const form = document.getElementById('contact-form');
+        const successBox = document.getElementById('form-success');
+        const submitBtn = document.getElementById('submit-btn');
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            try {
+                await fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(new FormData(form)).toString()
+                });
+
+                // Swap form for success message — no page reload, no redirect
+                form.style.display = 'none';
+                successBox.classList.add('visible');
+                successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            } catch (err) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send enquiry';
+                alert('Something went wrong — please email us directly at accountingmage@outlook.com');
+            }
+        });
+    </script>
 
 </body>
 
