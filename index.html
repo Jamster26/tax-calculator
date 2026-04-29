@@ -921,28 +921,37 @@
     </footer>
 
     <script>
+        // Auto-resize the demo iframe to match its content
+        window.addEventListener('message', function (e) {
+            if (!e.data) return;
+            const iframe = document.getElementById('demo-iframe');
+            if (!iframe) return;
+            // Catch both message types present in the widget
+            if (e.data.type === 'resize' && e.data.height) {
+                iframe.style.height = e.data.height + 'px';
+            }
+            if (e.data.type === 'lmo-widget-height' && e.data.height) {
+                iframe.style.height = e.data.height + 'px';
+            }
+        });
+
         const form = document.getElementById('contact-form');
         const successBox = document.getElementById('form-success');
         const submitBtn = document.getElementById('submit-btn');
 
         form.addEventListener('submit', async function (e) {
             e.preventDefault();
-
             submitBtn.disabled = true;
             submitBtn.textContent = 'Sending...';
-
             try {
                 await fetch('/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: new URLSearchParams(new FormData(form)).toString()
                 });
-
-                // Swap form for success message — no page reload, no redirect
                 form.style.display = 'none';
                 successBox.classList.add('visible');
                 successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
             } catch (err) {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Send enquiry';
